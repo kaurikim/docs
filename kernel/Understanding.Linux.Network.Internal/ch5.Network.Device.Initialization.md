@@ -123,3 +123,46 @@ el3_start_xmit(struct sk_buff *skb, struct net_device *dev)
     ... ... ... 
 }
 ```
+
+The driver stops the device queue with netif_stop_queue, thus inhibiting the
+kernel from submitting further transmission requests. The driver then checks
+whether the device’s memory has enough free space for a packet of 1,536 bytes.
+If so, the driver starts the queue to allow the kernel once again to submit
+transmission requests; otherwise, it instructs the device (by writing to a
+configuration register with an outw call) to generate an interrupt when that
+condition will be met. An interrupt handler will then reenable the device queue
+with netif_start_queue so that the kernel can restart transmissions.
+
+The netif_xxx_queue routines are described in the section “Enabling and Disabling
+Transmissions” in Chapter 11.
+
+### Interrupt sharing
+
+IRQ lines are a limited resource. A simple way to increase the number of devices
+a system can host is to allow multiple devices to share a common IRQ. Normally,
+each driver registers its own handler to the kernel for that IRQ. Instead of
+having the kernel receive the interrupt notification, find the right device, and
+invoke its handler, the kernel simply invokes all the handlers of those devices
+that registered for the same shared IRQ. It is up to the handlers to filter
+spurious invocations, such as by reading a registry on their devices.
+
+For a group of devices to share an IRQ line, all of them must have device drivers
+capable of handling shared IRQs. In other words, each time a device registers for
+an IRQ line, it needs to explicitly say whether it supports interrupt sharing.
+For example, the first device that registers for one IRQ, saying something like 
+“assign me IRQ n and use this routine fn as the handler,” must also specify whether
+it is willing to share the IRQ with other devices. When another device driver tries
+to register the same IRQ number, it is refused if either it, or the driver to which
+the IRQ is currently assigned, is incapable of sharing IRQs.
+
+### Organization of IRQs to handler mappings
+
+The mapping of IRQs to handlers is stored in a vector of lists, one list of
+handlers for each IRQ (see Figure 5-2). A list includes more than one element
+only when multiple devices share the same IRQ. The size of the vector (i.e., 
+the number of possible IRQ numbers) is architecture dependent and can vary from
+15 (on an x86) to more than 200. With the introduction of interrupt sharing,
+even more devices can be supported on a system at once.
+
+/* 생략 */
+

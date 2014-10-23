@@ -16,6 +16,11 @@ This configuration labels the physical network associated with the public networ
 as physnet1, and the physical network associated with the data network as physnet2, 
 which leads to the following configuration options in ovs_neutron_plugin.ini:
 
+
+tenant network 간의 단절의 위해서 switches 의 vlan segmentation 를 사용하는 예시를 들것음.
+public network 을 위한 physnet1, data network 을 위한 physnet2 라는 명칭을 ovs_neutron_plugin.ini 파일에 설정함.
+
+
 ```
 [ovs]
 tenant_network_type = vlan
@@ -23,3 +28,5 @@ network_vlan_ranges = physnet1,physnet2:100:110
 integration_bridge = br-int
 bridge_mappings = physnet2:br-eth1
 ```
+
+![Alt text](http://docs.openstack.org/admin-guide-cloud/content/figures/14/a/a/common/figures/under-the-hood-scenario-1.png "one tenant, two networks, one router")

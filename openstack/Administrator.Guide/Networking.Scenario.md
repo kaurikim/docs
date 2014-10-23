@@ -29,4 +29,4 @@ integration_bridge = br-int
 bridge_mappings = physnet2:br-eth1
 ```
 
-![Alt text](http://docs.openstack.org/admin-guide-cloud/content/figures/14/a/a/common/figures/under-the-hood-scenario-1.png "one tenant, two networks, one router")
+![Alt text](http://docs.openstack.org/admin-guide-cloud/content/figures/14/a/a/common/figures/under-the-hood-scenario-1.png | width=500 "one tenant, two networks, one router")

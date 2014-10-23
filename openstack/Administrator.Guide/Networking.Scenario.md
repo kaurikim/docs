@@ -33,5 +33,5 @@ bridge_mappings = physnet2:br-eth1
 
 * TEST 
 
-![](http://docs.openstack.org/admin-guide-cloud/content/figures/14/a/a/common/figures/under-the-hood-scenario-1.png|width=100px)
+![](http://docs.openstack.org/admin-guide-cloud/content/figures/14/a/a/common/figures/under-the-hood-scenario-1.png = 100*20)
 
